@@ -28,7 +28,7 @@ def _(mo):
     `mo.md(...)` renders a markdown string. Use an f-string to embed live values:
 
     ```python
-    mo.md(f"The result is **{value}**")
+    mo.md(f"The result is **{{value}}**")
     ```
 
     All standard markdown is supported: headings, bold, italic, lists, tables,
