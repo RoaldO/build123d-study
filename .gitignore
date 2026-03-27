@@ -4,3 +4,4 @@ __pycache__/
 *.stl
 *.brep
 workspace/
+__marimo__/
