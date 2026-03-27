@@ -9,6 +9,7 @@ def _():
     import marimo as mo
     import json
     from pathlib import Path
+
     return Path, json, mo
 
 
@@ -29,7 +30,7 @@ def _(mo):
     return
 
 
-@app.cell
+@app.cell(hide_code=True)
 def _(Path, json, mo):
     try:
         _saved = json.loads((Path.home() / ".marimocad_prefs.json").read_text()).get("layout", "medium")
@@ -40,29 +41,23 @@ def _(Path, json, mo):
         "columns — controls left, model right": "columns",
     }
     _saved_key = next((k for k, v in _options.items() if v == _saved), "medium — single column (default)")
-    layout = mo.ui.radio(
-        options=_options,
-        value=_saved_key,
-        label="Preferred layout",
-    )
-    layout
-    return (layout,)
+    layout = mo.ui.radio(options=_options, value=_saved_key, label="Preferred layout")
 
-
-@app.cell
-def _(mo):
-    save_btn = mo.ui.button(label="Save preference")
-    save_btn
-    return (save_btn,)
-
-
-@app.cell
-def _(Path, json, layout, mo, save_btn):
-    if save_btn.value:
+    def _save(_):
         _path = Path.home() / ".marimocad_prefs.json"
         _path.write_text(json.dumps({"layout": layout.value}, indent=2))
+        return layout.value
+
+    save_btn = mo.ui.button(label="Save preference", on_click=_save)
+    mo.vstack([layout, save_btn])
+    return layout, save_btn
+
+
+@app.cell(hide_code=True)
+def _(mo, save_btn):
+    if save_btn.value:
         mo.callout(
-            mo.md(f"Saved **{layout.value}** layout to `{_path}`.  \n"
+            mo.md(f"Saved **{save_btn.value}** layout.  \n"
                   "Re-open any lesson to apply the new setting."),
             kind="success",
         )
