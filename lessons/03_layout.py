@@ -30,6 +30,31 @@ def _(mo):
     | `mo.stat(...)` | Single metric display |
 
     Layouts can be nested freely.
+
+    ## Column layout
+
+    For wider notebooks — especially useful when working with 3D models — marimo
+    supports a two-column layout. Enable it at the top of the file:
+
+    ```python
+    app = marimo.App(width="columns")
+    ```
+
+    Then assign cells to a column with the `column=` parameter:
+
+    ```python
+    @app.cell(column=0)
+    def _(mo):
+        slider = mo.ui.slider(...)   # controls on the left
+
+    @app.cell(column=1)
+    def _(slider):
+        viewer.render(...)           # 3D model on the right
+        viewer
+    ```
+
+    This is particularly handy for CAD work: you keep the 3D model in view
+    while tweaking parameters. Lesson 06 shows it in practice.
     """)
     return
 

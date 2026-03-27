@@ -1,7 +1,7 @@
 import marimo
 
 __generated_with = "0.21.1"
-app = marimo.App(width="columns")
+app = marimo.App(width="medium")
 
 
 @app.cell
@@ -15,7 +15,7 @@ def _():
     return Align, Axis, Box, Cylinder, GridLocations, Location, Locations, PolarLocations, cad, mo
 
 
-@app.cell(column=0)
+@app.cell
 def _(mo):
     mo.md("""
     # Lesson 10 — Locations and Positioning
@@ -58,7 +58,7 @@ def _(mo):
     return
 
 
-@app.cell(column=0)
+@app.cell
 def _(mo):
     pattern = mo.ui.radio(
         ["Grid", "Polar", "Manual"],
@@ -71,7 +71,7 @@ def _(mo):
     return count, pattern, spacing
 
 
-@app.cell(column=1)
+@app.cell
 def _(Align, Box, Cylinder, GridLocations, PolarLocations, Locations, BuildPart, cad, count, pattern, spacing):
     from build123d import BuildPart, Mode
 
@@ -94,7 +94,7 @@ def _(Align, Box, Cylinder, GridLocations, PolarLocations, Locations, BuildPart,
     return BuildPart, Mode, part, viewer
 
 
-@app.cell(column=0)
+@app.cell
 def _(mo):
     mo.md("""
     ## Exercise

@@ -1,7 +1,7 @@
 import marimo
 
 __generated_with = "0.21.1"
-app = marimo.App(width="columns")
+app = marimo.App(width="medium")
 
 
 @app.cell
@@ -20,7 +20,7 @@ def _():
     )
 
 
-@app.cell(column=0)
+@app.cell
 def _(mo):
     mo.md("""
     # Lesson 09 — Sketches and Extrude
@@ -60,7 +60,7 @@ def _(mo):
     return
 
 
-@app.cell(column=0)
+@app.cell
 def _(mo):
     op = mo.ui.radio(["Extrude", "Revolve"], value="Extrude", label="Operation")
     width  = mo.ui.slider(20, 100, value=60, label="Width")
@@ -70,7 +70,7 @@ def _(mo):
     return height, hole_r, op, width
 
 
-@app.cell(column=1)
+@app.cell
 def _(
     Axis, BuildPart, BuildSketch, Circle, Plane,
     Rectangle, cad, extrude, height, hole_r, op, revolve,
@@ -93,7 +93,7 @@ def _(
     return Mode, part, viewer
 
 
-@app.cell(column=0)
+@app.cell
 def _(mo):
     mo.md("""
     ## Exercise

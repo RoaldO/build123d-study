@@ -1,7 +1,7 @@
 import marimo
 
 __generated_with = "0.21.1"
-app = marimo.App(width="columns")
+app = marimo.App(width="medium")
 
 
 @app.cell
@@ -12,7 +12,7 @@ def _():
     return Align, Axis, Box, Cylinder, GeomType, cad, chamfer, fillet, mo
 
 
-@app.cell(column=0)
+@app.cell
 def _(mo):
     mo.md("""
     # Lesson 12 — Fillets and Chamfers
@@ -54,7 +54,7 @@ def _(mo):
     return
 
 
-@app.cell(column=0)
+@app.cell
 def _(mo):
     op      = mo.ui.radio(["fillet", "chamfer"], value="fillet", label="Operation")
     target  = mo.ui.radio(["all", "vertical", "top ring"], value="vertical", label="Edge selection")
@@ -63,7 +63,7 @@ def _(mo):
     return op, size, target
 
 
-@app.cell(column=1)
+@app.cell
 def _(Axis, Box, Align, GeomType, cad, chamfer, fillet, op, size, target):
     solid = Box(60, 40, 25, align=(Align.CENTER, Align.CENTER, Align.MIN))
 
@@ -89,7 +89,7 @@ def _(Axis, Box, Align, GeomType, cad, chamfer, fillet, op, size, target):
     return edges, result, solid, viewer
 
 
-@app.cell(column=0)
+@app.cell
 def _(mo):
     mo.md("""
     ## Exercise

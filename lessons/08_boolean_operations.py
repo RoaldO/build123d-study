@@ -1,7 +1,7 @@
 import marimo
 
 __generated_with = "0.21.1"
-app = marimo.App(width="columns")
+app = marimo.App(width="medium")
 
 
 @app.cell
@@ -12,7 +12,7 @@ def _():
     return Align, Box, Cylinder, Location, Sphere, cad, mo
 
 
-@app.cell(column=0)
+@app.cell
 def _(mo):
     mo.md("""
     # Lesson 08 — Boolean Operations
@@ -41,14 +41,14 @@ def _(mo):
     return
 
 
-@app.cell(column=0)
+@app.cell
 def _(mo):
     op = mo.ui.radio(["Union", "Subtract", "Intersect"], value="Union", label="Operation")
     op
     return (op,)
 
 
-@app.cell(column=1)
+@app.cell
 def _(Align, Box, Cylinder, Location, cad, op):
     base = Box(50, 50, 20, align=(Align.CENTER, Align.CENTER, Align.MIN))
     tool = Cylinder(18, 30).move(Location((0, 0, 0)))
@@ -66,7 +66,7 @@ def _(Align, Box, Cylinder, Location, cad, op):
     return base, result, tool, viewer
 
 
-@app.cell(column=0)
+@app.cell
 def _(mo):
     mo.md("""
     ## Exercise

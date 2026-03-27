@@ -1,7 +1,7 @@
 import marimo
 
 __generated_with = "0.21.1"
-app = marimo.App(width="columns")
+app = marimo.App(width="medium")
 
 
 @app.cell
@@ -12,7 +12,7 @@ def _():
     return Box, Cone, Cylinder, Location, Sphere, Torus, cad, mo
 
 
-@app.cell(column=0)
+@app.cell
 def _(mo):
     mo.md("""
     # Lesson 07 — Primitives
@@ -42,7 +42,7 @@ def _(mo):
     return
 
 
-@app.cell(column=0)
+@app.cell
 def _(mo):
     shape_choice = mo.ui.dropdown(
         ["Box", "Cylinder", "Sphere", "Cone", "Torus"],
@@ -53,7 +53,7 @@ def _(mo):
     return (shape_choice,)
 
 
-@app.cell(column=1)
+@app.cell
 def _(Box, Cone, Cylinder, Sphere, Torus, cad, shape_choice):
     shapes = {
         "Box":      Box(40, 30, 20),
@@ -68,7 +68,7 @@ def _(Box, Cone, Cylinder, Sphere, Torus, cad, shape_choice):
     return shapes, viewer
 
 
-@app.cell(column=0)
+@app.cell
 def _(mo):
     mo.md("""
     ## Exercise

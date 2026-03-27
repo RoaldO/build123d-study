@@ -1,7 +1,7 @@
 import marimo
 
 __generated_with = "0.21.1"
-app = marimo.App(width="columns")
+app = marimo.App(width="medium")
 
 
 @app.cell
@@ -12,7 +12,7 @@ def _():
     return Align, Axis, Box, Cylinder, GeomType, SortBy, cad, mo
 
 
-@app.cell(column=0)
+@app.cell
 def _(mo):
     mo.md("""
     # Lesson 11 — Selectors
@@ -60,7 +60,7 @@ def _(mo):
     return
 
 
-@app.cell(column=0)
+@app.cell
 def _(mo):
     selector = mo.ui.dropdown(
         ["all edges", "Z edges", "circular edges", "top face"],
@@ -71,7 +71,7 @@ def _(mo):
     return (selector,)
 
 
-@app.cell(column=1)
+@app.cell
 def _(Align, Axis, Box, Cylinder, GeomType, cad, selector):
     from build123d import Mode, BuildPart
 
@@ -100,13 +100,13 @@ def _(Align, Axis, Box, Cylinder, GeomType, cad, selector):
     return BuildPart, Mode, count, part, sel, solid, viewer
 
 
-@app.cell(column=1)
+@app.cell
 def _(count, mo, selector):
     mo.md(f"**{selector.value}** → `{count}` element(s) selected")
     return
 
 
-@app.cell(column=0)
+@app.cell
 def _(mo):
     mo.md("""
     ## Exercise

@@ -1,7 +1,7 @@
 import marimo
 
 __generated_with = "0.21.1"
-app = marimo.App(width="columns")
+app = marimo.App(width="medium")
 
 
 @app.cell
@@ -22,7 +22,7 @@ def _():
     )
 
 
-@app.cell(column=0)
+@app.cell
 def _(mo):
     mo.md("""
     # Lesson 13 — Parametric Design
@@ -44,7 +44,7 @@ def _(mo):
     return
 
 
-@app.cell(column=0)
+@app.cell
 def _(mo):
     length    = mo.ui.slider(40, 200, value=100, step=2,   label="Length (mm)")
     width     = mo.ui.slider(30, 150, value=70,  step=2,   label="Width (mm)")
@@ -58,7 +58,7 @@ def _(mo):
     return fillet_r, hole_d, hole_n, hole_ring, length, lip_h, thickness, width
 
 
-@app.cell(column=1)
+@app.cell
 def _(
     Align, Axis, Cylinder, BuildPart, BuildSketch, Rectangle,
     Location, PolarLocations,
@@ -104,7 +104,7 @@ def _(
     return Mode, lid, total_h, viewer
 
 
-@app.cell(column=0)
+@app.cell
 def _(mo):
     mo.md("""
     ## Exercise
