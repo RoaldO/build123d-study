@@ -42,22 +42,29 @@ def _(Path, json, mo):
     }
     _saved_key = next((k for k, v in _options.items() if v == _saved), "medium — single column (default)")
     layout = mo.ui.radio(options=_options, value=_saved_key, label="Preferred layout")
-
-    def _save(_):
-        _path = Path.home() / ".marimocad_prefs.json"
-        _path.write_text(json.dumps({"layout": layout.value}, indent=2))
-        return layout.value
-
-    save_btn = mo.ui.button(label="Save preference", on_click=_save)
-    mo.vstack([layout, save_btn])
-    return layout, save_btn
+    layout
+    return (layout,)
 
 
 @app.cell(hide_code=True)
-def _(mo, save_btn):
-    if save_btn.value:
+def _(mo):
+    save_btn = mo.ui.button(
+        label="Save preference",
+        value=0,
+        on_click=lambda v: v + 1,
+        kind="success",
+    )
+    save_btn
+    return (save_btn,)
+
+
+@app.cell(hide_code=True)
+def _(Path, json, layout, mo, save_btn):
+    if save_btn.value > 0:
+        _path = Path.home() / ".marimocad_prefs.json"
+        _path.write_text(json.dumps({"layout": layout.value}, indent=2))
         mo.callout(
-            mo.md(f"Saved **{save_btn.value}** layout.  \n"
+            mo.md(f"Saved **{layout.value}** layout to `{_path}`.  \n"
                   "Re-open any lesson to apply the new setting."),
             kind="success",
         )
