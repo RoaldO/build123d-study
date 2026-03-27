@@ -4,22 +4,15 @@ __generated_with = "0.21.1"
 app = marimo.App(width="medium")
 
 
-@app.cell
+@app.cell(hide_code=True)
 def _():
     import marimo as mo
     import json
     from pathlib import Path
-
-    _prefs_path = Path.home() / ".marimocad_prefs.json"
-    try:
-        _saved = json.loads(_prefs_path.read_text()).get("layout", "medium")
-    except Exception:
-        _saved = "medium"
-
-    return Path, _prefs_path, _saved, json, mo
+    return Path, json, mo
 
 
-@app.cell
+@app.cell(hide_code=True)
 def _(mo):
     mo.md("""
     # Setup — Screen Layout Preference
@@ -37,7 +30,11 @@ def _(mo):
 
 
 @app.cell
-def _(_saved, mo):
+def _(Path, json, mo):
+    try:
+        _saved = json.loads((Path.home() / ".marimocad_prefs.json").read_text()).get("layout", "medium")
+    except Exception:
+        _saved = "medium"
     layout = mo.ui.radio(
         options={"medium — single column (default)": "medium",
                  "columns — controls left, model right": "columns"},
