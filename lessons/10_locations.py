@@ -31,7 +31,15 @@ def _():
 
 @app.cell(hide_code=True)
 def _(mo):
-    mo.md("""
+    import os as _os
+    from pathlib import Path as _P
+    _d = _P(str(mo.notebook_location()))
+    _r = _P(_os.getcwd())
+    _prev = f"/?file={(_d / '09_sketches.py').relative_to(_r)}"
+    _next = f"/?file={(_d / '11_selectors.py').relative_to(_r)}"
+    mo.md(f"""
+    <small>[← 09]({_prev}) &nbsp;·&nbsp; [11 →]({_next})</small>
+
     # Lesson 10 — Locations and Positioning
 
     Positioning shapes is one of the most important skills in build123d.

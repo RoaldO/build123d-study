@@ -14,7 +14,15 @@ def _():
 
 @app.cell(hide_code=True)
 def _(mo):
-    mo.md("""
+    import os as _os
+    from pathlib import Path as _P
+    _d = _P(str(mo.notebook_location()))
+    _r = _P(_os.getcwd())
+    _prev = f"/?file={(_d / '05_anywidget.py').relative_to(_r)}"
+    _next = f"/?file={(_d / '07_primitives.py').relative_to(_r)}"
+    mo.md(f"""
+    <small>[← 05]({_prev}) &nbsp;·&nbsp; [07 →]({_next})</small>
+
     # Lesson 06 — The CAD Viewer
 
     ## marimo-cad Viewer

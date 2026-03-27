@@ -33,7 +33,14 @@ def _():
 
 @app.cell(hide_code=True)
 def _(mo):
-    mo.md("""
+    import os as _os
+    from pathlib import Path as _P
+    _d = _P(str(mo.notebook_location()))
+    _r = _P(_os.getcwd())
+    _prev = f"/?file={(_d / '12_fillets_and_chamfers.py').relative_to(_r)}"
+    mo.md(f"""
+    <small>[← 12]({_prev})</small>
+
     # Lesson 13 — Parametric Design
 
     This lesson brings everything together. We build a **parametric lid** —

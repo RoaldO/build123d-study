@@ -12,7 +12,15 @@ def _():
 
 @app.cell(hide_code=True)
 def _(mo):
-    mo.md("""
+    import os as _os
+    from pathlib import Path as _P
+    _d = _P(str(mo.notebook_location()))
+    _r = _P(_os.getcwd())
+    _prev = f"/?file={(_d / '02_ui_elements.py').relative_to(_r)}"
+    _next = f"/?file={(_d / '04_markdown_and_state.py').relative_to(_r)}"
+    mo.md(f"""
+    <small>[← 02]({_prev}) &nbsp;·&nbsp; [04 →]({_next})</small>
+
     # Lesson 03 — Layout
 
     marimo provides layout helpers to organise UI elements and content within a

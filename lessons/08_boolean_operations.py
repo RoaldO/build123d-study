@@ -28,7 +28,15 @@ def _():
 
 @app.cell(hide_code=True)
 def _(mo):
-    mo.md("""
+    import os as _os
+    from pathlib import Path as _P
+    _d = _P(str(mo.notebook_location()))
+    _r = _P(_os.getcwd())
+    _prev = f"/?file={(_d / '07_primitives.py').relative_to(_r)}"
+    _next = f"/?file={(_d / '09_sketches.py').relative_to(_r)}"
+    mo.md(f"""
+    <small>[← 07]({_prev}) &nbsp;·&nbsp; [09 →]({_next})</small>
+
     # Lesson 08 — Boolean Operations
 
     The three fundamental boolean operations let you combine and subtract solids.

@@ -36,7 +36,15 @@ def _():
 
 @app.cell(hide_code=True)
 def _(mo):
-    mo.md("""
+    import os as _os
+    from pathlib import Path as _P
+    _d = _P(str(mo.notebook_location()))
+    _r = _P(_os.getcwd())
+    _prev = f"/?file={(_d / '08_boolean_operations.py').relative_to(_r)}"
+    _next = f"/?file={(_d / '10_locations.py').relative_to(_r)}"
+    mo.md(f"""
+    <small>[← 08]({_prev}) &nbsp;·&nbsp; [10 →]({_next})</small>
+
     # Lesson 09 — Sketches and Extrude
 
     build123d uses a **builder API** for sketch-based modelling.
