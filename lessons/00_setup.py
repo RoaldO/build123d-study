@@ -63,14 +63,14 @@ def _(Path, json, layout, mo, save_btn):
     if save_btn.value > 0:
         _path = Path.home() / ".marimocad_prefs.json"
         _path.write_text(json.dumps({"layout": layout.value}, indent=2))
-        mo.callout(
-            mo.md(f"Saved **{layout.value}** layout to `{_path}`.  \n"
+        _out = mo.callout(
+            mo.md(f"Saved **{layout.value}** layout.  \n"
                   "Re-open any lesson to apply the new setting."),
             kind="success",
         )
     else:
-        mo.md("*Click **Save preference** to write your choice.*")
-    return
+        _out = mo.md("*Click **Save preference** to write your choice.*")
+    _out
 
 
 if __name__ == "__main__":
