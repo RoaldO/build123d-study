@@ -67,7 +67,7 @@ def _(loud):
     return
 
 
-@app.cell
+@app.cell(hide_code=True)
 def _(mo):
     mo.md("""
     ## Exercise
@@ -79,7 +79,6 @@ def _(mo):
     3. Try creating a circular dependency — what does marimo do?
     """)
     return
-
 
 
 @app.cell(hide_code=True)
@@ -115,6 +114,7 @@ def _(copy_btn, mo):
     else:
         _out = mo.md("")
     _out
+    return
 
 
 if __name__ == "__main__":

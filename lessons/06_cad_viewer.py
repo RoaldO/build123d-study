@@ -12,7 +12,7 @@ def _():
     return Box, cad, mo
 
 
-@app.cell
+@app.cell(hide_code=True)
 def _(mo):
     mo.md("""
     # Lesson 06 — The CAD Viewer

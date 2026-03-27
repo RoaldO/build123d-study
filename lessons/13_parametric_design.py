@@ -31,7 +31,7 @@ def _():
     return Align, Axis, BuildPart, BuildSketch, Cylinder, PolarLocations, Rectangle, cad, extrude, fillet, mo, use_columns
 
 
-@app.cell
+@app.cell(hide_code=True)
 def _(mo):
     mo.md("""
     # Lesson 13 — Parametric Design
@@ -108,7 +108,7 @@ def _(
     return Mode, lid, total_h, viewer
 
 
-@app.cell
+@app.cell(hide_code=True)
 def _(mo):
     mo.md("""
     ## Exercise

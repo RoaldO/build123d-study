@@ -34,7 +34,7 @@ def _():
     )
 
 
-@app.cell
+@app.cell(hide_code=True)
 def _(mo):
     mo.md("""
     # Lesson 09 — Sketches and Extrude
@@ -108,7 +108,7 @@ def _(
     return Mode, part, viewer
 
 
-@app.cell
+@app.cell(hide_code=True)
 def _(mo):
     mo.md("""
     ## Exercise

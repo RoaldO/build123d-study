@@ -26,7 +26,7 @@ def _():
     return Align, Axis, Box, Cylinder, GeomType, cad, mo, use_columns
 
 
-@app.cell
+@app.cell(hide_code=True)
 def _(mo):
     mo.md("""
     # Lesson 11 — Selectors
@@ -103,7 +103,7 @@ def _(Align, Axis, Box, Cylinder, GeomType, cad, mo, selector, use_columns):
     return count, sel, shape, solid, viewer
 
 
-@app.cell
+@app.cell(hide_code=True)
 def _(mo):
     mo.md("""
     ## Exercise

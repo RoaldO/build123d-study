@@ -26,7 +26,7 @@ def _():
     return Box, Cone, Cylinder, Sphere, Torus, cad, mo, use_columns
 
 
-@app.cell
+@app.cell(hide_code=True)
 def _(mo):
     mo.md("""
     # Lesson 07 — Primitives
@@ -83,7 +83,7 @@ def _(Box, Cone, Cylinder, Sphere, Torus, cad, mo, shape_choice, use_columns):
     return shapes, viewer
 
 
-@app.cell
+@app.cell(hide_code=True)
 def _(mo):
     mo.md("""
     ## Exercise

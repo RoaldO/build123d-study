@@ -29,7 +29,7 @@ def _():
     return Align, Box, Cylinder, GridLocations, Location, Locations, PolarLocations, cad, mo, use_columns
 
 
-@app.cell
+@app.cell(hide_code=True)
 def _(mo):
     mo.md("""
     # Lesson 10 — Locations and Positioning
@@ -109,7 +109,7 @@ def _(Align, Box, Cylinder, GridLocations, Locations, PolarLocations, cad, count
     return BuildPart, Mode, part, viewer
 
 
-@app.cell
+@app.cell(hide_code=True)
 def _(mo):
     mo.md("""
     ## Exercise

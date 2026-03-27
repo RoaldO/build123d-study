@@ -26,7 +26,7 @@ def _():
     return Align, Axis, Box, GeomType, cad, chamfer, fillet, mo, use_columns
 
 
-@app.cell
+@app.cell(hide_code=True)
 def _(mo):
     mo.md("""
     # Lesson 12 — Fillets and Chamfers
@@ -100,7 +100,7 @@ def _(Align, Axis, Box, cad, chamfer, fillet, mo, op, size, target, use_columns)
     return edges, result, solid, viewer
 
 
-@app.cell
+@app.cell(hide_code=True)
 def _(mo):
     mo.md("""
     ## Exercise

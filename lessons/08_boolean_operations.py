@@ -26,7 +26,7 @@ def _():
     return Align, Box, Cylinder, Location, Sphere, cad, mo, use_columns
 
 
-@app.cell
+@app.cell(hide_code=True)
 def _(mo):
     mo.md("""
     # Lesson 08 — Boolean Operations
@@ -81,7 +81,7 @@ def _(Align, Box, Cylinder, Location, cad, mo, op, use_columns):
     return base, result, tool, viewer
 
 
-@app.cell
+@app.cell(hide_code=True)
 def _(mo):
     mo.md("""
     ## Exercise
