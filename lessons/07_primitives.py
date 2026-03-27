@@ -99,41 +99,5 @@ def _(mo):
 
 
 
-@app.cell(hide_code=True)
-def _(mo):
-    import shutil
-    from pathlib import Path as _Path
-
-    _name = "07_primitives.py"
-    _src = _Path(str(mo.notebook_location())) / _name
-    _dst = _Path(str(mo.notebook_location())).parent / "workspace" / _name
-
-    def _do_copy(v):
-        _dst.parent.mkdir(exist_ok=True)
-        shutil.copy2(_src, _dst)
-        return v + 1
-
-    copy_btn = mo.ui.button(
-        label="Copy lesson to workspace",
-        on_click=_do_copy,
-        value=0,
-    )
-    _in_workspace = _Path(str(mo.notebook_location())).name == "workspace"
-    mo.md("") if _in_workspace else copy_btn
-    return (copy_btn,)
-
-
-@app.cell(hide_code=True)
-def _(copy_btn, mo):
-    if copy_btn.value > 0:
-        _out = mo.callout(
-            mo.md("Copied! Open the file from the `workspace/` folder to start the exercise."),
-            kind="success",
-        )
-    else:
-        _out = mo.md("")
-    _out
-
-
 if __name__ == "__main__":
     app.run()

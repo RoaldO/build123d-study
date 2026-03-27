@@ -16,7 +16,17 @@ def _():
 @app.cell(hide_code=True)
 def _(mo):
     mo.md("""
-    # Setup — Screen Layout Preference
+    # Setup
+
+    Run this notebook once before starting the lessons. It does two things:
+
+    1. **Layout preference** — choose single-column or two-column layout.
+    2. **Copy lessons to workspace** — copies all lesson files to the
+       `workspace/` folder so your edits stay separate from the templates.
+
+    ---
+
+    ## Step 1 — Screen Layout Preference
 
     Some lessons display a 3D model next to the controls. On a wide or
     ultrawide screen this works best with a **two-column layout**; on a
@@ -24,8 +34,6 @@ def _(mo):
 
     Your choice is saved to `~/.marimocad_prefs.json` and applied
     automatically whenever you open a lesson. It is not tracked by git.
-
-    ---
     """)
     return
 
@@ -70,6 +78,61 @@ def _(Path, json, layout, mo, save_btn):
         )
     else:
         _out = mo.md("*Click **Save preference** to write your choice.*")
+    _out
+
+
+@app.cell(hide_code=True)
+def _(mo):
+    mo.md("""
+    ---
+
+    ## Step 2 — Copy lessons to workspace
+
+    The `workspace/` folder is gitignored — your edits and progress stay local.
+    Click the button below to copy all lesson templates there.
+
+    > **Note:** existing files in `workspace/` will be overwritten.
+    """)
+    return
+
+
+@app.cell(hide_code=True)
+def _(Path, mo):
+    import shutil
+
+    def _do_copy(v):
+        _lessons = Path(str(mo.notebook_location()))
+        _workspace = _lessons.parent / "workspace"
+        _workspace.mkdir(exist_ok=True)
+        _copied = []
+        for _f in sorted(_lessons.glob("[0-9][0-9]_*.py")):
+            shutil.copy2(_f, _workspace / _f.name)
+            _copied.append(_f.name)
+        return _copied
+
+    copy_all_btn = mo.ui.button(
+        label="Copy all lessons to workspace",
+        on_click=_do_copy,
+        value=[],
+        kind="success",
+    )
+    copy_all_btn
+    return copy_all_btn, shutil
+
+
+@app.cell(hide_code=True)
+def _(copy_all_btn, mo):
+    if copy_all_btn.value:
+        _first = "workspace/01_cells_and_reactivity.py"
+        _out = mo.callout(
+            mo.md(
+                f"Copied {len(copy_all_btn.value)} lessons to `workspace/`.  \n\n"
+                f"Open **`{_first}`** from the file browser to start."
+            ),
+            kind="success",
+        )
+    else:
+        _out = mo.md("")
     _out
 
 
