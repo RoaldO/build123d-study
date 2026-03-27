@@ -106,7 +106,8 @@ def _(mo):
         on_click=_do_copy,
         value=0,
     )
-    copy_btn
+    _in_workspace = _Path(str(mo.notebook_location())).name == "workspace"
+    mo.md("") if _in_workspace else copy_btn
     return (copy_btn,)
 
 
