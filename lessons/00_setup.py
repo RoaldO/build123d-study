@@ -35,10 +35,14 @@ def _(Path, json, mo):
         _saved = json.loads((Path.home() / ".marimocad_prefs.json").read_text()).get("layout", "medium")
     except Exception:
         _saved = "medium"
+    _options = {
+        "medium — single column (default)": "medium",
+        "columns — controls left, model right": "columns",
+    }
+    _saved_key = next((k for k, v in _options.items() if v == _saved), "medium — single column (default)")
     layout = mo.ui.radio(
-        options={"medium — single column (default)": "medium",
-                 "columns — controls left, model right": "columns"},
-        value=_saved,
+        options=_options,
+        value=_saved_key,
         label="Preferred layout",
     )
     layout
