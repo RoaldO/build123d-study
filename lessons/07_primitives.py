@@ -1,15 +1,29 @@
 import marimo
+import json
+from pathlib import Path
 
-__generated_with = "0.21.1"
-app = marimo.App(width="medium")
+try:
+    _use_columns = json.loads((Path.home() / ".marimocad_prefs.json").read_text()).get("layout") == "columns"
+except Exception:
+    _use_columns = False
+
+app = marimo.App(width="full" if _use_columns else "medium")
 
 
 @app.cell
 def _():
+    import json
     import marimo as mo
     import marimo_cad as cad
-    from build123d import Box, Cylinder, Sphere, Cone, Torus, Location
-    return Box, Cone, Cylinder, Location, Sphere, Torus, cad, mo
+    from pathlib import Path
+    from build123d import Box, Cylinder, Sphere, Cone, Torus
+
+    try:
+        use_columns = json.loads((Path.home() / ".marimocad_prefs.json").read_text()).get("layout") == "columns"
+    except Exception:
+        use_columns = False
+
+    return Box, Cone, Cylinder, Sphere, Torus, cad, mo, use_columns
 
 
 @app.cell
@@ -49,12 +63,11 @@ def _(mo):
         value="Box",
         label="Primitive",
     )
-    shape_choice
     return (shape_choice,)
 
 
 @app.cell
-def _(Box, Cone, Cylinder, Sphere, Torus, cad, shape_choice):
+def _(Box, Cone, Cylinder, Sphere, Torus, cad, mo, shape_choice, use_columns):
     shapes = {
         "Box":      Box(40, 30, 20),
         "Cylinder": Cylinder(20, 40),
@@ -64,7 +77,9 @@ def _(Box, Cone, Cylinder, Sphere, Torus, cad, shape_choice):
     }
     viewer = cad.Viewer()
     viewer.render(shapes[shape_choice.value])
-    viewer
+
+    controls = mo.vstack([shape_choice])
+    mo.hstack([controls, viewer], widths=[1, 3]) if use_columns else mo.vstack([controls, viewer])
     return shapes, viewer
 
 
@@ -74,8 +89,7 @@ def _(mo):
     ## Exercise
 
     1. Add sliders to control the dimensions of each primitive. Connect them
-       so the correct sliders appear for the selected shape (`mo.ui.dropdown`
-       + `if` logic).
+       so the correct sliders appear for the selected shape (`if` logic).
     2. Use `align=(Align.CENTER, Align.CENTER, Align.MIN)` on the Box so it
        sits on the XY plane — observe the difference in the viewer.
     3. Create a `Cylinder` with `radius=5` and `height=50`. Place a copy at

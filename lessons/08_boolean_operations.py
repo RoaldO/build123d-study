@@ -1,15 +1,29 @@
 import marimo
+import json
+from pathlib import Path
 
-__generated_with = "0.21.1"
-app = marimo.App(width="medium")
+try:
+    _use_columns = json.loads((Path.home() / ".marimocad_prefs.json").read_text()).get("layout") == "columns"
+except Exception:
+    _use_columns = False
+
+app = marimo.App(width="full" if _use_columns else "medium")
 
 
 @app.cell
 def _():
+    import json
     import marimo as mo
     import marimo_cad as cad
+    from pathlib import Path
     from build123d import Box, Cylinder, Sphere, Location, Align
-    return Align, Box, Cylinder, Location, Sphere, cad, mo
+
+    try:
+        use_columns = json.loads((Path.home() / ".marimocad_prefs.json").read_text()).get("layout") == "columns"
+    except Exception:
+        use_columns = False
+
+    return Align, Box, Cylinder, Location, Sphere, cad, mo, use_columns
 
 
 @app.cell
@@ -44,12 +58,11 @@ def _(mo):
 @app.cell
 def _(mo):
     op = mo.ui.radio(["Union", "Subtract", "Intersect"], value="Union", label="Operation")
-    op
     return (op,)
 
 
 @app.cell
-def _(Align, Box, Cylinder, Location, cad, op):
+def _(Align, Box, Cylinder, Location, cad, mo, op, use_columns):
     base = Box(50, 50, 20, align=(Align.CENTER, Align.CENTER, Align.MIN))
     tool = Cylinder(18, 30).move(Location((0, 0, 0)))
 
@@ -62,7 +75,9 @@ def _(Align, Box, Cylinder, Location, cad, op):
 
     viewer = cad.Viewer()
     viewer.render(result)
-    viewer
+
+    controls = mo.vstack([op])
+    mo.hstack([controls, viewer], widths=[1, 3]) if use_columns else mo.vstack([controls, viewer])
     return base, result, tool, viewer
 
 

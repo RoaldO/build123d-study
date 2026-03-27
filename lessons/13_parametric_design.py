@@ -1,25 +1,34 @@
 import marimo
+import json
+from pathlib import Path
 
-__generated_with = "0.21.1"
-app = marimo.App(width="medium")
+try:
+    _use_columns = json.loads((Path.home() / ".marimocad_prefs.json").read_text()).get("layout") == "columns"
+except Exception:
+    _use_columns = False
+
+app = marimo.App(width="full" if _use_columns else "medium")
 
 
 @app.cell
 def _():
+    import json
     import marimo as mo
     import marimo_cad as cad
+    from pathlib import Path
     from build123d import (
         BuildPart, BuildSketch,
-        Box, Cylinder, Circle, Rectangle,
-        extrude, fillet, chamfer,
-        Align, Axis, Location, PolarLocations,
-        export_stl, export_step,
+        Cylinder, Rectangle,
+        extrude, fillet,
+        Align, Axis, PolarLocations,
     )
-    return (
-        Align, Axis, Box, BuildPart, BuildSketch,
-        Cylinder, Circle, Location, PolarLocations, Rectangle,
-        cad, chamfer, export_step, export_stl, extrude, fillet, mo,
-    )
+
+    try:
+        use_columns = json.loads((Path.home() / ".marimocad_prefs.json").read_text()).get("layout") == "columns"
+    except Exception:
+        use_columns = False
+
+    return Align, Axis, BuildPart, BuildSketch, Cylinder, PolarLocations, Rectangle, cad, extrude, fillet, mo, use_columns
 
 
 @app.cell
@@ -54,28 +63,23 @@ def _(mo):
     hole_d    = mo.ui.slider(2,  8,   value=3,   step=0.5, label="Hole diameter (mm)")
     hole_n    = mo.ui.slider(2,  8,   value=4,   step=1,   label="Number of holes")
     hole_ring = mo.ui.slider(10, 60,  value=30,  step=1,   label="Hole ring radius (mm)")
-    mo.vstack([length, width, thickness, lip_h, fillet_r, hole_d, hole_n, hole_ring])
     return fillet_r, hole_d, hole_n, hole_ring, length, lip_h, thickness, width
 
 
 @app.cell
 def _(
-    Align, Axis, Cylinder, BuildPart, BuildSketch, Rectangle,
-    Location, PolarLocations,
+    Align, Axis, BuildPart, BuildSketch, Cylinder, PolarLocations, Rectangle,
     cad, extrude, fillet,
-    fillet_r, hole_d, hole_n, hole_ring, length, lip_h, thickness, width,
+    fillet_r, hole_d, hole_n, hole_ring, length, lip_h, mo, thickness, use_columns, width,
 ):
     from build123d import Mode
 
     with BuildPart() as lid:
-        # Base plate
         with BuildSketch():
             Rectangle(length.value, width.value)
         extrude(amount=thickness.value)
 
-        # Lip around the edge
         if lip_h.value > 0:
-            t = thickness.value
             lip_w = 3.0
             with BuildSketch(lid.faces().sort_by(Axis.Z)[-1]):
                 Rectangle(length.value, width.value)
@@ -86,21 +90,21 @@ def _(
                 )
             extrude(amount=lip_h.value)
 
-        # Mounting holes through the full part
         total_h = thickness.value + lip_h.value
         with PolarLocations(hole_ring.value, int(hole_n.value)):
             Cylinder(hole_d.value / 2, total_h + 1, mode=Mode.SUBTRACT)
 
-        # Fillet the four vertical corners
         if fillet_r.value > 0:
             try:
                 fillet(lid.edges().filter_by(Axis.Z), fillet_r.value)
             except Exception:
-                pass  # skip if radius is too large
+                pass
 
     viewer = cad.Viewer()
     viewer.render(lid.part)
-    viewer
+
+    controls = mo.vstack([length, width, thickness, lip_h, fillet_r, hole_d, hole_n, hole_ring])
+    mo.hstack([controls, viewer], widths=[1, 3]) if use_columns else mo.vstack([controls, viewer])
     return Mode, lid, total_h, viewer
 
 

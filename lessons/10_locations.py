@@ -1,18 +1,32 @@
 import marimo
+import json
+from pathlib import Path
 
-__generated_with = "0.21.1"
-app = marimo.App(width="medium")
+try:
+    _use_columns = json.loads((Path.home() / ".marimocad_prefs.json").read_text()).get("layout") == "columns"
+except Exception:
+    _use_columns = False
+
+app = marimo.App(width="full" if _use_columns else "medium")
 
 
 @app.cell
 def _():
+    import json
     import marimo as mo
     import marimo_cad as cad
+    from pathlib import Path
     from build123d import (
         Box, Cylinder, Location, Locations,
-        GridLocations, PolarLocations, Align, Axis,
+        GridLocations, PolarLocations, Align,
     )
-    return Align, Axis, Box, Cylinder, GridLocations, Location, Locations, PolarLocations, cad, mo
+
+    try:
+        use_columns = json.loads((Path.home() / ".marimocad_prefs.json").read_text()).get("layout") == "columns"
+    except Exception:
+        use_columns = False
+
+    return Align, Box, Cylinder, GridLocations, Location, Locations, PolarLocations, cad, mo, use_columns
 
 
 @app.cell
@@ -28,8 +42,8 @@ def _(mo):
     `Location((x, y, z), (rx, ry, rz))` — translate + rotate (degrees).
 
     ```python
-    shape.move(Location((10, 0, 0)))        # move in X
-    shape.move(Location((0, 0, 0), (0, 0, 45)))  # rotate 45° around Z
+    shape.move(Location((10, 0, 0)))              # move in X
+    shape.move(Location((0, 0, 0), (0, 0, 45)))   # rotate 45° around Z
     ```
 
     ## Locations context manager
@@ -67,12 +81,11 @@ def _(mo):
     )
     count   = mo.ui.slider(2, 12, value=4, label="Count")
     spacing = mo.ui.slider(10, 40, value=20, label="Spacing / Radius")
-    mo.vstack([pattern, count, spacing])
     return count, pattern, spacing
 
 
 @app.cell
-def _(Align, Box, Cylinder, GridLocations, PolarLocations, Locations, BuildPart, cad, count, pattern, spacing):
+def _(Align, Box, Cylinder, GridLocations, Locations, PolarLocations, cad, count, mo, pattern, spacing, use_columns):
     from build123d import BuildPart, Mode
 
     with BuildPart() as part:
@@ -90,7 +103,9 @@ def _(Align, Box, Cylinder, GridLocations, PolarLocations, Locations, BuildPart,
 
     viewer = cad.Viewer()
     viewer.render(part.part)
-    viewer
+
+    controls = mo.vstack([pattern, count, spacing])
+    mo.hstack([controls, viewer], widths=[1, 3]) if use_columns else mo.vstack([controls, viewer])
     return BuildPart, Mode, part, viewer
 
 

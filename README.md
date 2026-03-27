@@ -43,6 +43,7 @@ docker compose up --build
 
 | # | File | Topic |
 |---|---|---|
+| 00 | `00_setup.py` | **Start here** — choose your screen layout preference |
 | 01 | `01_cells_and_reactivity.py` | Marimo cells, the reactive execution model |
 | 02 | `02_ui_elements.py` | Sliders, dropdowns, text input, buttons |
 | 03 | `03_layout.py` | vstack, hstack, tabs, callouts |

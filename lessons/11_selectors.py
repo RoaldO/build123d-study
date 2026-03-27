@@ -1,15 +1,29 @@
 import marimo
+import json
+from pathlib import Path
 
-__generated_with = "0.21.1"
-app = marimo.App(width="medium")
+try:
+    _use_columns = json.loads((Path.home() / ".marimocad_prefs.json").read_text()).get("layout") == "columns"
+except Exception:
+    _use_columns = False
+
+app = marimo.App(width="full" if _use_columns else "medium")
 
 
 @app.cell
 def _():
+    import json
     import marimo as mo
     import marimo_cad as cad
-    from build123d import Box, Cylinder, Align, Axis, GeomType, SortBy
-    return Align, Axis, Box, Cylinder, GeomType, SortBy, cad, mo
+    from pathlib import Path
+    from build123d import Box, Cylinder, Align, Axis, GeomType
+
+    try:
+        use_columns = json.loads((Path.home() / ".marimocad_prefs.json").read_text()).get("layout") == "columns"
+    except Exception:
+        use_columns = False
+
+    return Align, Axis, Box, Cylinder, GeomType, cad, mo, use_columns
 
 
 @app.cell
@@ -34,10 +48,10 @@ def _(mo):
     Filter by geometry type or axis direction:
 
     ```python
-    shape.edges().filter_by(Axis.Z)       # edges parallel to Z
-    shape.faces().filter_by(Axis.Z)       # faces normal to Z (top/bottom)
-    shape.edges().filter_by(GeomType.LINE)   # straight edges only
-    shape.edges().filter_by(GeomType.CIRCLE) # circular edges only
+    shape.edges().filter_by(Axis.Z)            # edges parallel to Z
+    shape.faces().filter_by(Axis.Z)            # faces normal to Z (top/bottom)
+    shape.edges().filter_by(GeomType.LINE)     # straight edges only
+    shape.edges().filter_by(GeomType.CIRCLE)   # circular edges only
     ```
 
     ## sort_by
@@ -48,14 +62,6 @@ def _(mo):
     shape.faces().sort_by(Axis.Z)[-1]   # topmost face
     shape.faces().sort_by(Axis.Z)[0]    # bottommost face
     ```
-
-    ## Counting
-
-    ```python
-    len(shape.edges())    # how many edges?
-    ```
-
-    Selectors are used heavily in the next lesson (fillets/chamfers).
     """)
     return
 
@@ -67,43 +73,34 @@ def _(mo):
         value="all edges",
         label="Show selection",
     )
-    selector
     return (selector,)
 
 
 @app.cell
-def _(Align, Axis, Box, Cylinder, GeomType, cad, selector):
-    from build123d import Mode, BuildPart
-
-    with BuildPart() as part:
-        box = Box(60, 40, 20, align=(Align.CENTER, Align.CENTER, Align.MIN))
-        with BuildPart():
-            pass  # placeholder
-
+def _(Align, Axis, Box, Cylinder, GeomType, cad, mo, selector, use_columns):
     solid = Box(60, 40, 20, align=(Align.CENTER, Align.CENTER, Align.MIN))
 
     if selector.value == "all edges":
         sel = solid.edges()
+        shape = solid
     elif selector.value == "Z edges":
         sel = solid.edges().filter_by(Axis.Z)
+        shape = solid
     elif selector.value == "circular edges":
-        cyl = Cylinder(20, 30)
-        sel = cyl.edges().filter_by(GeomType.CIRCLE)
-        solid = cyl
+        shape = Cylinder(20, 30)
+        sel = shape.edges().filter_by(GeomType.CIRCLE)
     else:
         sel = solid.faces().sort_by(Axis.Z)[-1:]
+        shape = solid
 
     count = len(sel)
     viewer = cad.Viewer()
-    viewer.render(solid)
-    viewer
-    return BuildPart, Mode, count, part, sel, solid, viewer
+    viewer.render(shape)
 
-
-@app.cell
-def _(count, mo, selector):
-    mo.md(f"**{selector.value}** → `{count}` element(s) selected")
-    return
+    info = mo.md(f"**{selector.value}** → `{count}` element(s) selected")
+    controls = mo.vstack([selector, info])
+    mo.hstack([controls, viewer], widths=[1, 3]) if use_columns else mo.vstack([controls, viewer])
+    return count, sel, shape, solid, viewer
 
 
 @app.cell

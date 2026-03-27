@@ -1,22 +1,36 @@
 import marimo
+import json
+from pathlib import Path
 
-__generated_with = "0.21.1"
-app = marimo.App(width="medium")
+try:
+    _use_columns = json.loads((Path.home() / ".marimocad_prefs.json").read_text()).get("layout") == "columns"
+except Exception:
+    _use_columns = False
+
+app = marimo.App(width="full" if _use_columns else "medium")
 
 
 @app.cell
 def _():
+    import json
     import marimo as mo
     import marimo_cad as cad
+    from pathlib import Path
     from build123d import (
         BuildPart, BuildSketch, extrude, revolve,
         Circle, Rectangle, RegularPolygon, Ellipse,
         SlotCenterToCenter, Plane, Axis,
     )
+
+    try:
+        use_columns = json.loads((Path.home() / ".marimocad_prefs.json").read_text()).get("layout") == "columns"
+    except Exception:
+        use_columns = False
+
     return (
         Axis, BuildPart, BuildSketch, Circle, Ellipse,
         Plane, Rectangle, RegularPolygon, SlotCenterToCenter,
-        cad, extrude, mo, revolve,
+        cad, extrude, mo, revolve, use_columns,
     )
 
 
@@ -31,7 +45,7 @@ def _(mo):
 
     ```python
     with BuildPart() as part:
-        with BuildSketch() as sk:
+        with BuildSketch():
             Rectangle(40, 20)
             Circle(8, mode=Mode.SUBTRACT)  # hole
         extrude(amount=10)
@@ -62,18 +76,17 @@ def _(mo):
 
 @app.cell
 def _(mo):
-    op = mo.ui.radio(["Extrude", "Revolve"], value="Extrude", label="Operation")
+    op     = mo.ui.radio(["Extrude", "Revolve"], value="Extrude", label="Operation")
     width  = mo.ui.slider(20, 100, value=60, label="Width")
     height = mo.ui.slider(5,  60,  value=30, label="Height / Depth")
     hole_r = mo.ui.slider(0,  20,  value=8,  label="Hole radius (0 = none)")
-    mo.vstack([op, width, height, hole_r])
     return height, hole_r, op, width
 
 
 @app.cell
 def _(
-    Axis, BuildPart, BuildSketch, Circle, Plane,
-    Rectangle, cad, extrude, height, hole_r, op, revolve,
+    Axis, BuildPart, BuildSketch, Circle, Rectangle,
+    cad, extrude, height, hole_r, mo, op, revolve, use_columns, width,
 ):
     from build123d import Mode
 
@@ -89,7 +102,9 @@ def _(
 
     viewer = cad.Viewer()
     viewer.render(part.part)
-    viewer
+
+    controls = mo.vstack([op, width, height, hole_r])
+    mo.hstack([controls, viewer], widths=[1, 3]) if use_columns else mo.vstack([controls, viewer])
     return Mode, part, viewer
 
 

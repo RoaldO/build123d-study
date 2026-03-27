@@ -1,15 +1,29 @@
 import marimo
+import json
+from pathlib import Path
 
-__generated_with = "0.21.1"
-app = marimo.App(width="medium")
+try:
+    _use_columns = json.loads((Path.home() / ".marimocad_prefs.json").read_text()).get("layout") == "columns"
+except Exception:
+    _use_columns = False
+
+app = marimo.App(width="full" if _use_columns else "medium")
 
 
 @app.cell
 def _():
+    import json
     import marimo as mo
     import marimo_cad as cad
+    from pathlib import Path
     from build123d import Box, Cylinder, fillet, chamfer, Align, Axis, GeomType
-    return Align, Axis, Box, Cylinder, GeomType, cad, chamfer, fillet, mo
+
+    try:
+        use_columns = json.loads((Path.home() / ".marimocad_prefs.json").read_text()).get("layout") == "columns"
+    except Exception:
+        use_columns = False
+
+    return Align, Axis, Box, GeomType, cad, chamfer, fillet, mo, use_columns
 
 
 @app.cell
@@ -48,7 +62,7 @@ def _(mo):
 
     ## Tip
 
-    Start with a large radius and reduce it — fillet errors are often caused
+    Start with a small radius and increase it — fillet errors are often caused
     by a radius that is too large for the geometry.
     """)
     return
@@ -56,15 +70,14 @@ def _(mo):
 
 @app.cell
 def _(mo):
-    op      = mo.ui.radio(["fillet", "chamfer"], value="fillet", label="Operation")
-    target  = mo.ui.radio(["all", "vertical", "top ring"], value="vertical", label="Edge selection")
-    size    = mo.ui.slider(1, 10, value=3, label="Radius / Length")
-    mo.vstack([op, target, size])
+    op     = mo.ui.radio(["fillet", "chamfer"], value="fillet", label="Operation")
+    target = mo.ui.radio(["all", "vertical", "top ring"], value="vertical", label="Edge selection")
+    size   = mo.ui.slider(1, 10, value=3, label="Radius / Length")
     return op, size, target
 
 
 @app.cell
-def _(Axis, Box, Align, GeomType, cad, chamfer, fillet, op, size, target):
+def _(Align, Axis, Box, cad, chamfer, fillet, mo, op, size, target, use_columns):
     solid = Box(60, 40, 25, align=(Align.CENTER, Align.CENTER, Align.MIN))
 
     if target.value == "all":
@@ -75,17 +88,15 @@ def _(Axis, Box, Align, GeomType, cad, chamfer, fillet, op, size, target):
         edges = solid.faces().sort_by(Axis.Z)[-1].edges()
 
     try:
-        if op.value == "fillet":
-            result = fillet(edges, size.value)
-        else:
-            result = chamfer(edges, size.value)
-        viewer = cad.Viewer()
-        viewer.render(result)
-    except Exception as e:
-        viewer = cad.Viewer()
-        viewer.render(solid)
+        result = fillet(edges, size.value) if op.value == "fillet" else chamfer(edges, size.value)
+    except Exception:
+        result = solid
 
-    viewer
+    viewer = cad.Viewer()
+    viewer.render(result)
+
+    controls = mo.vstack([op, target, size])
+    mo.hstack([controls, viewer], widths=[1, 3]) if use_columns else mo.vstack([controls, viewer])
     return edges, result, solid, viewer
 
 
