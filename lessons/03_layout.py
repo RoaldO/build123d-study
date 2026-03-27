@@ -32,7 +32,7 @@ def _(mo):
     |---|---|
     | `mo.vstack([...])` | Stack items vertically |
     | `mo.hstack([...])` | Stack items horizontally |
-    | `mo.tabs({...})` | Tabbed container |
+    | `mo.ui.tabs({...})` | Tabbed container |
     | `mo.accordion({...})` | Collapsible sections |
     | `mo.callout(...)` | Highlighted info/warning box |
     | `mo.stat(...)` | Single metric display |
@@ -95,7 +95,7 @@ def _(depth, height, mo, width):
 
 @app.cell
 def _(mo):
-    mo.tabs({
+    mo.ui.tabs({
         "Info":    mo.md("Tabs keep related content together without clutter."),
         "Warning": mo.callout(mo.md("Watch your wall thickness!"), kind="warn"),
         "Tip":     mo.callout(mo.md("Use `mo.hstack` for side-by-side controls."), kind="info"),
