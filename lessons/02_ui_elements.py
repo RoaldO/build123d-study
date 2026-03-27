@@ -1,0 +1,90 @@
+import marimo
+
+__generated_with = "0.21.1"
+app = marimo.App(width="medium")
+
+
+@app.cell
+def _():
+    import marimo as mo
+    return (mo,)
+
+
+@app.cell
+def _(mo):
+    mo.md("""
+    # Lesson 02 — UI Elements
+
+    marimo has a rich set of built-in UI components. Because of reactivity, any
+    cell that reads `.value` from a UI element automatically re-runs when the
+    user interacts with it — no callbacks needed.
+
+    ## Common elements
+
+    | Element | Description |
+    |---|---|
+    | `mo.ui.slider` | Numeric range |
+    | `mo.ui.number` | Numeric input field |
+    | `mo.ui.text` | Text input |
+    | `mo.ui.dropdown` | Select from a list |
+    | `mo.ui.checkbox` | Boolean toggle |
+    | `mo.ui.button` | Trigger an action |
+    | `mo.ui.radio` | Pick one from a set |
+
+    Each element has a `.value` property you read in downstream cells.
+    """)
+    return
+
+
+@app.cell
+def _(mo):
+    size = mo.ui.slider(1, 100, value=42, label="Size (mm)")
+    size
+    return (size,)
+
+
+@app.cell
+def _(mo):
+    material = mo.ui.dropdown(
+        ["PLA", "PETG", "ABS", "TPU"],
+        value="PLA",
+        label="Material",
+    )
+    material
+    return (material,)
+
+
+@app.cell
+def _(mo):
+    name = mo.ui.text(placeholder="Enter a name", label="Part name")
+    name
+    return (name,)
+
+
+@app.cell
+def _(material, mo, name, size):
+    mo.md(f"""
+    **Summary**
+
+    - Part: `{name.value or '—'}`
+    - Material: `{material.value}`
+    - Size: `{size.value} mm`
+    """)
+    return
+
+
+@app.cell
+def _(mo):
+    mo.md("""
+    ## Exercise
+
+    1. Add a `mo.ui.number` element for wall thickness (range 0.4 – 5.0 mm).
+    2. Add a `mo.ui.checkbox` labelled "Add support material".
+    3. Extend the summary to include both new values.
+    4. Try `mo.ui.radio` with options `["Draft", "Normal", "Fine"]` for print quality.
+    """)
+    return
+
+
+if __name__ == "__main__":
+    app.run()

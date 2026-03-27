@@ -1,0 +1,124 @@
+import marimo
+
+__generated_with = "0.21.1"
+app = marimo.App(width="columns")
+
+
+@app.cell
+def _():
+    import marimo as mo
+    import marimo_cad as cad
+    from build123d import (
+        BuildPart, BuildSketch,
+        Box, Cylinder, Circle, Rectangle,
+        extrude, fillet, chamfer,
+        Align, Axis, Location, PolarLocations,
+        export_stl, export_step,
+    )
+    return (
+        Align, Axis, Box, BuildPart, BuildSketch,
+        Cylinder, Circle, Location, PolarLocations, Rectangle,
+        cad, chamfer, export_step, export_stl, extrude, fillet, mo,
+    )
+
+
+@app.cell(column=0)
+def _(mo):
+    mo.md("""
+    # Lesson 13 — Parametric Design
+
+    This lesson brings everything together. We build a **parametric lid** —
+    a rectangular plate with rounded corners, a lip, and polar mounting holes.
+
+    All dimensions are driven by sliders. Every change instantly updates
+    the model.
+
+    ## Design parameters
+
+    - Outer dimensions (length, width)
+    - Wall thickness
+    - Lip height
+    - Corner fillet radius
+    - Number and radius of mounting holes
+    """)
+    return
+
+
+@app.cell(column=0)
+def _(mo):
+    length    = mo.ui.slider(40, 200, value=100, step=2,   label="Length (mm)")
+    width     = mo.ui.slider(30, 150, value=70,  step=2,   label="Width (mm)")
+    thickness = mo.ui.slider(1,  10,  value=3,   step=0.5, label="Thickness (mm)")
+    lip_h     = mo.ui.slider(0,  20,  value=5,   step=1,   label="Lip height (mm)")
+    fillet_r  = mo.ui.slider(0,  15,  value=5,   step=1,   label="Corner fillet (mm)")
+    hole_d    = mo.ui.slider(2,  8,   value=3,   step=0.5, label="Hole diameter (mm)")
+    hole_n    = mo.ui.slider(2,  8,   value=4,   step=1,   label="Number of holes")
+    hole_ring = mo.ui.slider(10, 60,  value=30,  step=1,   label="Hole ring radius (mm)")
+    mo.vstack([length, width, thickness, lip_h, fillet_r, hole_d, hole_n, hole_ring])
+    return fillet_r, hole_d, hole_n, hole_ring, length, lip_h, thickness, width
+
+
+@app.cell(column=1)
+def _(
+    Align, Axis, Cylinder, BuildPart, BuildSketch, Rectangle,
+    Location, PolarLocations,
+    cad, extrude, fillet,
+    fillet_r, hole_d, hole_n, hole_ring, length, lip_h, thickness, width,
+):
+    from build123d import Mode
+
+    with BuildPart() as lid:
+        # Base plate
+        with BuildSketch():
+            Rectangle(length.value, width.value)
+        extrude(amount=thickness.value)
+
+        # Lip around the edge
+        if lip_h.value > 0:
+            t = thickness.value
+            lip_w = 3.0
+            with BuildSketch(lid.faces().sort_by(Axis.Z)[-1]):
+                Rectangle(length.value, width.value)
+                Rectangle(
+                    length.value - 2 * lip_w,
+                    width.value  - 2 * lip_w,
+                    mode=Mode.SUBTRACT,
+                )
+            extrude(amount=lip_h.value)
+
+        # Mounting holes through the full part
+        total_h = thickness.value + lip_h.value
+        with PolarLocations(hole_ring.value, int(hole_n.value)):
+            Cylinder(hole_d.value / 2, total_h + 1, mode=Mode.SUBTRACT)
+
+        # Fillet the four vertical corners
+        if fillet_r.value > 0:
+            try:
+                fillet(lid.edges().filter_by(Axis.Z), fillet_r.value)
+            except Exception:
+                pass  # skip if radius is too large
+
+    viewer = cad.Viewer()
+    viewer.render(lid.part)
+    viewer
+    return Mode, lid, total_h, viewer
+
+
+@app.cell(column=0)
+def _(mo):
+    mo.md("""
+    ## Exercise
+
+    1. Add a chamfer on the top edge ring instead of (or in addition to) the
+       vertical fillet.
+    2. Add a `mo.ui.checkbox` to toggle the lip on/off.
+    3. Add an export button that saves the model as `lid.step` using
+       `export_step(lid.part, "lid.step")`.
+    4. **Final challenge**: modify the design to be a box with a separate lid.
+       Render both as a named dict in the viewer.
+    """)
+    return
+
+
+if __name__ == "__main__":
+    app.run()

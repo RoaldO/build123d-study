@@ -39,16 +39,33 @@ If you haven't built the marimocad image yet, use:
 docker compose up --build
 ```
 
-## Structure
+## Curriculum
 
-Notebooks are organised by topic:
+| # | File | Topic |
+|---|---|---|
+| 01 | `01_cells_and_reactivity.py` | Marimo cells, the reactive execution model |
+| 02 | `02_ui_elements.py` | Sliders, dropdowns, text input, buttons |
+| 03 | `03_layout.py` | vstack, hstack, tabs, callouts |
+| 04 | `04_markdown_and_state.py` | Markdown, LaTeX, mo.state |
+| 05 | `05_anywidget.py` | What anywidget is and how it works |
+| 06 | `06_cad_viewer.py` | The marimo-cad Viewer widget |
+| 07 | `07_primitives.py` | Box, Cylinder, Sphere, Cone, Torus |
+| 08 | `08_boolean_operations.py` | Union, subtraction, intersection |
+| 09 | `09_sketches.py` | BuildSketch, extrude, revolve |
+| 10 | `10_locations.py` | Location, GridLocations, PolarLocations |
+| 11 | `11_selectors.py` | edges(), faces(), filter_by(), sort_by() |
+| 12 | `12_fillets_and_chamfers.py` | fillet and chamfer on selected edges |
+| 13 | `13_parametric_design.py` | Full parametric design — putting it all together |
 
+## Working on lessons
+
+Lesson files in `lessons/` are read-only templates tracked by git. Copy a lesson
+to `workspace/` before editing so your progress stays local:
+
+```bash
+cp lessons/01_cells_and_reactivity.py workspace/
 ```
-build123d-study/
-  01_basics/
-  02_sketches/
-  03_assemblies/
-  ...
-```
 
-Each folder contains one or more `.py` marimo notebooks that can be opened and edited directly in the browser.
+The `workspace/` folder is gitignored — your edits and exported files (STL, STEP)
+will never be committed. This also means others can use the same lessons without
+any merge conflicts.
