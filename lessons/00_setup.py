@@ -121,13 +121,16 @@ def _(Path, mo):
 
 
 @app.cell(hide_code=True)
-def _(copy_all_btn, mo):
+def _(Path, copy_all_btn, mo):
     if copy_all_btn.value:
-        _first = "workspace/01_cells_and_reactivity.py"
+        import os
+        _cwd = Path(os.getcwd())
+        _first_file = Path(str(mo.notebook_location())).parent / "workspace" / "01_cells_and_reactivity.py"
+        _url = "/" + str(_first_file.relative_to(_cwd))
         _out = mo.callout(
             mo.md(
                 f"Copied {len(copy_all_btn.value)} lessons to `workspace/`.  \n\n"
-                f"Open **`{_first}`** from the file browser to start."
+                f"[**Start lesson 01 →**]({_url})"
             ),
             kind="success",
         )
