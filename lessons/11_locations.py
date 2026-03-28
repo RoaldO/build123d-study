@@ -36,11 +36,11 @@ def _(mo):
     _d = _P(str(mo.notebook_location()))
     _r = _P(_os.getcwd())
     _prev = f"/?file={(_d / '09_sketches.py').relative_to(_r)}"
-    _next = f"/?file={(_d / '11_selectors.py').relative_to(_r)}"
+    _next = f"/?file={(_d / '12_selectors.py').relative_to(_r)}"
     mo.md(f"""
-    <small>[← 09]({_prev}) &nbsp;·&nbsp; [11 →]({_next})</small>
+    <small>[← 09]({_prev}) &nbsp;·&nbsp; [12 →]({_next})</small>
 
-    # Lesson 10 — Locations and Positioning
+    # Lesson 11 — Locations and Positioning
 
     Positioning shapes is one of the most important skills in build123d.
 

@@ -35,11 +35,11 @@ def _():
 def _(mo, _P, _os):
     _d = _P(str(mo.notebook_location()))
     _r = _P(_os.getcwd())
-    _prev = f"/?file={(_d / '13_parametric_design.py').relative_to(_r)}"
+    _prev = f"/?file={(_d / '14_parametric_design.py').relative_to(_r)}"
     mo.md(f"""
-    <small>[← 13]({_prev})</small>
+    <small>[← 14]({_prev})</small>
 
-    # Lesson 14 — Measurements and Inspection
+    # Lesson 15 — Measurements and Inspection
 
     build123d provides a rich set of properties to inspect geometry: distances,
     areas, volumes, face normals, arc centers, and more. This lesson covers the

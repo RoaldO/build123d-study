@@ -32,12 +32,12 @@ def _(mo):
     from pathlib import Path as _P
     _d = _P(str(mo.notebook_location()))
     _r = _P(_os.getcwd())
-    _prev = f"/?file={(_d / '10_locations.py').relative_to(_r)}"
-    _next = f"/?file={(_d / '12_fillets_and_chamfers.py').relative_to(_r)}"
+    _prev = f"/?file={(_d / '11_locations.py').relative_to(_r)}"
+    _next = f"/?file={(_d / '13_fillets_and_chamfers.py').relative_to(_r)}"
     mo.md(f"""
-    <small>[← 10]({_prev}) &nbsp;·&nbsp; [12 →]({_next})</small>
+    <small>[← 11]({_prev}) &nbsp;·&nbsp; [13 →]({_next})</small>
 
-    # Lesson 11 — Selectors
+    # Lesson 12 — Selectors
 
     After creating geometry you often need to select specific **edges**,
     **faces**, or **vertices** to apply operations like fillet, chamfer,

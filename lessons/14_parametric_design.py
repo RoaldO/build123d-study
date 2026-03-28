@@ -37,12 +37,12 @@ def _(mo):
     from pathlib import Path as _P
     _d = _P(str(mo.notebook_location()))
     _r = _P(_os.getcwd())
-    _prev = f"/?file={(_d / '12_fillets_and_chamfers.py').relative_to(_r)}"
-    _next = f"/?file={(_d / '14_measurements.py').relative_to(_r)}"
+    _prev = f"/?file={(_d / '13_fillets_and_chamfers.py').relative_to(_r)}"
+    _next = f"/?file={(_d / '15_measurements.py').relative_to(_r)}"
     mo.md(f"""
-    <small>[← 12]({_prev}) &nbsp;·&nbsp; [14 →]({_next})</small>
+    <small>[← 13]({_prev}) &nbsp;·&nbsp; [15 →]({_next})</small>
 
-    # Lesson 13 — Parametric Design
+    # Lesson 14 — Parametric Design
 
     This lesson brings everything together. We build a **parametric lid** —
     a rectangular plate with rounded corners, a lip, and polar mounting holes.
