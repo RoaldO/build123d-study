@@ -101,8 +101,9 @@ def _(Path, mo):
     import shutil
 
     def _do_copy(v):
-        _lessons = Path(str(mo.notebook_location()))
-        _workspace = _lessons.parent / "workspace"
+        _project  = Path(str(mo.notebook_location())).parent
+        _lessons  = _project / "lessons"
+        _workspace = _project / "workspace"
         _workspace.mkdir(exist_ok=True)
         _copied = []
         for _f in sorted(_lessons.glob("[0-9][0-9]_*.py")):
