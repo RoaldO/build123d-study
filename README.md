@@ -57,6 +57,7 @@ docker compose up --build
 | 11 | `11_selectors.py` | edges(), faces(), filter_by(), sort_by() |
 | 12 | `12_fillets_and_chamfers.py` | fillet and chamfer on selected edges |
 | 13 | `13_parametric_design.py` | Full parametric design — putting it all together |
+| 14 | `14_measurements.py` | Measuring geometry: length, area, distance, normals, arc/fillet axis |
 
 ## Working on lessons
 
