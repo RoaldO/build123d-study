@@ -13,10 +13,9 @@ app = marimo.App(width="full" if _use_columns else "medium")
 @app.cell
 def _():
     import json
-    import os as _os
     import marimo as mo
     import marimo_cad as cad
-    from pathlib import Path as _P
+    from pathlib import Path
     from build123d import (
         BuildPart, BuildSketch, extrude,
         Box, Cylinder, Circle, Rectangle,
@@ -24,15 +23,17 @@ def _():
     )
 
     try:
-        use_columns = json.loads((_P.home() / ".marimocad_prefs.json").read_text()).get("layout") == "columns"
+        use_columns = json.loads((Path.home() / ".marimocad_prefs.json").read_text()).get("layout") == "columns"
     except Exception:
         use_columns = False
 
-    return Align, Axis, Box, BuildPart, BuildSketch, Circle, Cylinder, Location, Locations, Plane, Rectangle, _P, _os, cad, extrude, mo, use_columns
+    return Align, Axis, Box, BuildPart, BuildSketch, Circle, Cylinder, Location, Locations, Plane, Rectangle, cad, extrude, mo, use_columns
 
 
 @app.cell(hide_code=True)
-def _(mo, _P, _os):
+def _(mo):
+    import os as _os
+    from pathlib import Path as _P
     _d = _P(str(mo.notebook_location()))
     _r = _P(_os.getcwd())
     _prev = f"/?file={(_d / '09_sketches.py').relative_to(_r)}"
