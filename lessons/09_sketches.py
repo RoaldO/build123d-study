@@ -74,6 +74,15 @@ def _(mo):
     | `Ellipse` | `Ellipse(x_radius, y_radius)` |
     | `SlotCenterToCenter` | `SlotCenterToCenter(center_span, height)` |
 
+    `SlotCenterToCenter` makes an oblong slot shape — a rectangle with
+    semicircular ends, like a mounting slot. `center_span` is the distance
+    between the two arc centres; `height` is the slot width (= arc diameter).
+    Total length = `center_span + height`.
+
+    ```python
+    SlotCenterToCenter(40, 10)  # 50 mm long, 10 mm wide slot
+    ```
+
     ## Revolve
 
     Instead of `extrude`, use `revolve(axis=Axis.Y)` to spin the sketch
