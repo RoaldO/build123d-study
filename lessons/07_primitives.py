@@ -60,6 +60,24 @@ def _(mo):
     Box(10, 10, 5, align=(Align.CENTER, Align.CENTER, Align.MIN))
     # bottom face sits on the XY plane
     ```
+
+    ## Basic positioning with Location
+
+    `Location((x, y, z))` moves a shape to a new position.
+    Call `.move()` on any shape to apply it:
+
+    ```python
+    from build123d import Location
+    cyl = Cylinder(5, 30).move(Location((20, 0, 0)))
+    ```
+
+    Rotation can be added as a second argument (angles in degrees around X, Y, Z):
+
+    ```python
+    Cylinder(5, 30).move(Location((0, 0, 0), (0, 90, 0)))  # tip over 90°
+    ```
+
+    Lesson 10 covers `Location`, `GridLocations` and `PolarLocations` in full.
     """)
     return
 
