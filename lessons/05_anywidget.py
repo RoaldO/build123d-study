@@ -59,18 +59,18 @@ def _(mo):
 
     class CounterWidget(anywidget.AnyWidget):
         _esm = \"\"\"
-        function render({ model, el }) {
+        function render({{ model, el }}) {{
             let count = () => model.get("value");
             let btn = document.createElement("button");
-            btn.innerHTML = `clicks: ${count()}`;
-            btn.addEventListener("click", () => {
+            btn.innerHTML = `clicks: ${{count()}}`;
+            btn.addEventListener("click", () => {{
                 model.set("value", count() + 1);
                 model.save_changes();
-            });
-            model.on("change:value", () => { btn.innerHTML = `clicks: ${count()}`; });
+            }});
+            model.on("change:value", () => {{ btn.innerHTML = `clicks: ${{count()}}`; }});
             el.appendChild(btn);
-        }
-        export default { render };
+        }}
+        export default {{ render }};
         \"\"\"
         value = traitlets.Int(0).tag(sync=True)
 
