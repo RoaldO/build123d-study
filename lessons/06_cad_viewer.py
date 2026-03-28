@@ -54,6 +54,13 @@ def _(mo):
 
     Use `app = marimo.App(width="columns")` and set `column=` on your cells
     to place sliders in column 0 and the viewer in column 1.
+
+    ## Keeping up with sliders
+
+    build123d recomputes the geometry on every slider change. If you move a
+    slider quickly the viewer cell may fall behind and show a stale model or
+    an error. This is harmless — simply click the **run** button (▷) on the
+    viewer cell to recompute manually.
     """)
     return
 
