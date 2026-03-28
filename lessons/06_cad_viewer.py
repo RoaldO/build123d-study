@@ -47,7 +47,7 @@ def _(mo):
     ## Multi-part
 
     ```python
-    viewer.render({"base": base_part, "lid": lid_part})
+    viewer.render({{"base": base_part, "lid": lid_part}})
     ```
 
     ## Placing controls next to the viewer
@@ -82,7 +82,7 @@ def _(mo):
     ## Exercise
 
     1. Add a fourth slider for a second box and render both as a named dict:
-       `{"box_a": ..., "box_b": ...}`.
+       `{{"box_a": ..., "box_b": ...}}`.
     2. Use the export button in the toolbar to download the model as STL.
     3. Try `app = marimo.App(width="medium")` instead of `"columns"` — what
        changes?
